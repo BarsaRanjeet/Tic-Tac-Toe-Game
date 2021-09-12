@@ -69,7 +69,7 @@ io.on('connection', (socket) => {
                 io.to(socket.id).emit("message", "you resign the game so you loss the game, Thank you");
                 removeUser(socket.id);
                 socket.disconnect(true);
-            } else if (message == "y") {
+            } else if (message == "y") {    // when user choose "y" while restarting game
                 // restarting game 
                 game.resetGame();
                 game.changeOutput();
@@ -80,24 +80,24 @@ io.on('connection', (socket) => {
                 //displaying the layout
                 io.to(socket.id).emit("message", game.displayOutput); // to user 1
                 io.to(game.getAnotherUser(socket.id)).emit("message", game.displayOutput); // to user 2
-            } else if (message == "n") {
+            } else if (message == "n") {  // when user choose "n"
                 io.to(socket.id).emit("message", "you are leaving the game, Thank you");
                 removeUser(socket.id);
                 socket.disconnect(true);
             } else if (game.box.length <= 9) {
                 if (clients.length == 2) {
-                    // checking if same user has played move
+                    // checking if same user has played move(one user has to wait until another user playes move)
                     if (game.player != "" && game.player != socket.id && game.error == false) {
                         io.to(socket.id).emit("message", "Please wait, you have already played your move.");
                     } else {
-                        game.error = false;
+                        game.error = false; // making error = false for new error capture
                         game.player = socket.id;
-                        game.readMove(parseInt(message));
+                        game.readMove(parseInt(message)); // read moves
                         if (game.error) {
                             console.log("Error occored")
                             io.to(game.player).emit("message", game.errorMsg);
                         }
-                        else if (game.changePlayer) {
+                        else if (game.changePlayer) { // when user is changed
                             console.log(`player changed to ${game.player}`);
                             io.to(game.player).emit("message", game.displayOutput);
                             io.to(game.getAnotherUser(game.player)).emit("message", game.displayOutput);
@@ -106,11 +106,11 @@ io.on('connection', (socket) => {
                             game.changePlayer = false;
                             game.msg = "";
                         }
-                        else if (game.gameEnded) {
-                            if (game.gameEnded && game.winner == "") {
+                        else if (game.gameEnded) { // when game is ended and it's time for choosing winner
+                            if (game.gameEnded && game.winner == "") { // when game is tied
                                 io.to(socket.id).emit("message", " Game is tied, Try again? y or n? :");
                                 io.to(game.getAnotherUser(socket.id)).emit("message", "Game is tied, Try again? y or n? :");
-                            } else {
+                            } else { // if any user has been won
                                 io.to(game.winner).emit("message", "Congratulations you won the game..");
                                 io.to(game.getAnotherUser(game.winner)).emit("message", "Sorry, you loss the game..");
                                 game.winner = "";
@@ -118,7 +118,7 @@ io.on('connection', (socket) => {
 
                             }
                         }
-                        else if (game.msg != "") {
+                        else if (game.msg != "") { // if any other messsage is comming
                             socket.emit("message", game.msg);
                             game.msg = "";
                         }

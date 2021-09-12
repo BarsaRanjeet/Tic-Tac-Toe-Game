@@ -37,15 +37,18 @@ ${this.displayItem(this.box[6])} | ${this.displayItem(this.box[7])} | ${this.dis
     }
 
     continuePlay() {
+        // change layout of game
         this.changeOutput();
+
+        // process game if any 3 move matched for winner
         this.processGame();
         if (!this.gameEnded) {
-            // switch player
+            // switch player for another user
             this.changeOutput();
             this.player = this.getAnotherUser(this.player);
             this.msg = `Player ${this.player}, Your move? : `;
             this.changePlayer = true;
-            this.currentPlayer = this.currentPlayer ? false : true;
+            this.currentPlayer = this.currentPlayer ? false : true; // change another user
         }
     }
 
@@ -57,7 +60,6 @@ ${this.displayItem(this.box[6])} | ${this.displayItem(this.box[7])} | ${this.dis
             // checking vertically
             // col1
             if (this.box[0] && this.box[3] && this.box[6] && (Array.from(checkWin.add(this.box[0]).add(this.box[3]).add(this.box[6])).length === 1)) {
-                this.msg = `Player ${this.getPlayerFromChar(this.box[0])} Wins!!`;
                 this.winner = this.getPlayerFromChar(this.box[0]);
                 this.endGame();
             }
@@ -65,7 +67,6 @@ ${this.displayItem(this.box[6])} | ${this.displayItem(this.box[7])} | ${this.dis
 
             // col2
             if (this.box[1] && this.box[4] && this.box[7] && (Array.from(checkWin.add(this.box[1]).add(this.box[4]).add(this.box[7])).length === 1)) {
-                this.msg = `Player ${this.getPlayerFromChar(this.box[1])} Wins!!`;
                 this.winner = this.getPlayerFromChar(this.box[1]);
                 this.endGame();
             }
@@ -73,7 +74,6 @@ ${this.displayItem(this.box[6])} | ${this.displayItem(this.box[7])} | ${this.dis
 
             // col3
             if (this.box[2] && this.box[5] && this.box[8] && (Array.from(checkWin.add(this.box[2]).add(this.box[5]).add(this.box[8])).length === 1)) {
-                this.msg = `Player ${this.getPlayerFromChar(this.box[2])} Wins!!`;
                 this.winner = this.getPlayerFromChar(this.box[2]);
                 this.endGame();
             }
@@ -82,7 +82,6 @@ ${this.displayItem(this.box[6])} | ${this.displayItem(this.box[7])} | ${this.dis
             // checking horizontally
             // row1
             if (this.box[0] && this.box[1] && this.box[2] && (Array.from(checkWin.add(this.box[0]).add(this.box[1]).add(this.box[2])).length === 1)) {
-                this.msg = `Player ${this.getPlayerFromChar(this.box[0])} Wins!!`;
                 this.winner = this.getPlayerFromChar(this.box[0]);
                 this.endGame();
             }
@@ -90,7 +89,6 @@ ${this.displayItem(this.box[6])} | ${this.displayItem(this.box[7])} | ${this.dis
 
             // row2
             if (this.box[3] && this.box[4] && this.box[5] && (Array.from(checkWin.add(this.box[3]).add(this.box[4]).add(this.box[5])).length === 1)) {
-                this.msg = `Player ${this.getPlayerFromChar(this.box[3])} Wins!!`;
                 this.winner = this.getPlayerFromChar(this.box[3]);
                 this.endGame();
             }
@@ -98,7 +96,6 @@ ${this.displayItem(this.box[6])} | ${this.displayItem(this.box[7])} | ${this.dis
 
             //row3
             if (this.box[6] && this.box[7] && this.box[8] && (Array.from(checkWin.add(this.box[6]).add(this.box[7]).add(this.box[8])).length === 1)) {
-                this.msg = `Player ${this.getPlayerFromChar(this.box[6])} Wins!!`;
                 this.winner = this.getPlayerFromChar(this.box[6]);
                 this.endGame();
             }
@@ -106,7 +103,6 @@ ${this.displayItem(this.box[6])} | ${this.displayItem(this.box[7])} | ${this.dis
 
             // checking diagonal 
             if ((this.box[0] && this.box[4] && this.box[8] && (Array.from(checkWin.add(this.box[0]).add(this.box[4]).add(this.box[8])).length === 1)) || (this.box[2] && this.box[4] && this.box[6] && (Array.from(checkWin.add(this.box[2]).add(this.box[4]).add(this.box[6])).length === 1))) {
-                this.msg = `Player ${this.getPlayerFromChar(this.box[4])} Wins!!`;
                 this.winner = this.getPlayerFromChar(this.box[4]);
                 this.endGame();
             }
@@ -122,6 +118,7 @@ ${this.displayItem(this.box[6])} | ${this.displayItem(this.box[7])} | ${this.dis
         return item === undefined ? ' ' : item
     }
 
+    // get winner user
     getPlayerFromChar(char) {
         if (char === '*')
             return (this.players[0] == this.player) ? this.players[1] : this.player;
@@ -129,6 +126,7 @@ ${this.displayItem(this.box[6])} | ${this.displayItem(this.box[7])} | ${this.dis
             return (this.players[0] == this.player) ? this.player : this.players[1];
     }
 
+    // to display on layout
     getCharacter(player) {
         return player ? '*' : '0'
     }
@@ -146,15 +144,16 @@ ${this.displayItem(this.box[6])} | ${this.displayItem(this.box[7])} | ${this.dis
             this.error = true;
             this.errorMsg = "Position is already occupied, please try another";
         } else {
-            // register move
+            // register move which placed
             this.box[(position - 1)] = this.getCharacter(this.currentPlayer);
-            // record move
+            // record move 
             this.recordMove((position - 1), this.currentPlayer);
             // continue playing
             this.continuePlay();
         }
     }
 
+    // record moves
     recordMove(position, player) {
         this.playedBox.push({
             position: position,
@@ -163,6 +162,7 @@ ${this.displayItem(this.box[6])} | ${this.displayItem(this.box[7])} | ${this.dis
         });
     }
 
+    // get another user id by comparing two ids
     getAnotherUser(client) {
         return (this.players[0] == client) ? this.players[1] : this.players[0]
     }
