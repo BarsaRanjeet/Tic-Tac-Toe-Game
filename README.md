@@ -4,8 +4,8 @@ This is a tic tac toe game in node js
 
 ## requirenment
 
-nodejs/
-expresss/
+nodejs\
+expresss\
 socket.io
 
 ## to install library
