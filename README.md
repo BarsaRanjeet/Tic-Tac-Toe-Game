@@ -2,20 +2,19 @@
 
 This is a tic tac toe game in node js
 
-## requirenment
-
+## Requirement
 nodejs\
 expresss\
 socket.io
 
-## to install library
+## To install library
 
 npm install
 
-## to run server
+## To run server
 
 npm start
 
-## to run client
+## To run client
 
 node client.js 5050
