@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/RanjitBarsa/Tic-Tac-Toe-Game/issues"
   },
-  "homepage": "https://github.com/RanjitBarsa/Tic-Tac-Toe-Game#readme"
+  "homepage": "https://github.com/RanjitBarsa/Tic-Tac-Toe-Game#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
